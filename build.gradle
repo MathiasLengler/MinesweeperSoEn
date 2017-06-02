@@ -1,4 +1,13 @@
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -8,6 +17,7 @@ apply plugin: "idea"
 apply plugin: "eclipse"
 apply plugin: "maven"
 apply plugin: "jacoco"
+apply plugin: 'com.github.johnrengelman.shadow'
 
 idea {
     project {
