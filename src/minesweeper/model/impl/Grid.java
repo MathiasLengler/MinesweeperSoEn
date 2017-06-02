@@ -5,10 +5,7 @@ import minesweeper.model.IGrid;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Grid<T extends ICell> implements IGrid<T> {
@@ -21,7 +18,7 @@ public class Grid<T extends ICell> implements IGrid<T> {
 	private static final int[][] adjCord = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0},
 			{1, 1}};
 
-	protected Grid(T[][] cells, int mines) {
+	public Grid(T[][] cells, int mines) {
 		this.cells = cells;
 		this.mines = mines;
 		this.created = Instant.now();
@@ -61,9 +58,16 @@ public class Grid<T extends ICell> implements IGrid<T> {
 	public List<T> getCells() {
 		List<T> cellList = new LinkedList<>();
 		for (T[] rows : cells) {
-			for (T cell : rows) {
-				cellList.add(cell);
-			}
+			Collections.addAll(cellList, rows);
+		}
+		return cellList;
+	}
+
+	@Override
+	public List<List<T>> getNestedCells() {
+        List<List<T>> cellList = new LinkedList<>();
+		for (T[] row : cells) {
+		    cellList.add(Arrays.asList(row));
 		}
 		return cellList;
 	}

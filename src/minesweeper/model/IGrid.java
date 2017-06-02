@@ -21,6 +21,8 @@ public interface IGrid<T extends ICell> {
 	@Override
 	String toString();
 
+	List<List<T>> getNestedCells();
+
 	List<T> getAdjCells(ICell cell);
 
 }
