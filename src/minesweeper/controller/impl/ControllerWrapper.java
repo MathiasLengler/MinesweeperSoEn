@@ -106,4 +106,9 @@ public class ControllerWrapper extends Observable implements IMinesweeperControl
 		return controller.getGrid();
 	}
 
+	@Override
+	public boolean isGameFinished() {
+		return controller.isGameFinished();
+	}
+
 }

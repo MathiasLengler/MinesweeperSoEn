@@ -65,11 +65,6 @@ public class JacopSolver implements SolverPlugin {
 		return splitEdgeMaps;
 	}
 
-	private static boolean hasGameEnded(IMinesweeperControllerSolvable controller) {
-		String statusLine = controller.getStatusLine();
-		return statusLine.contains("You've won!") || statusLine.contains("Game over");
-	}
-
 	private static ImmutableSetMultimap<ICell, ICell> getEdgeMap(IMinesweeperControllerSolvable controller) {
 		IGrid<ICell> grid = controller.getGrid();
 
@@ -185,11 +180,11 @@ public class JacopSolver implements SolverPlugin {
 		mineAtIndex.stream()
 		           .map(closedCells::get)
 		           .filter(ICell::isClosedWithoutFlag)
-		           .forEach(c -> minesToFlag.add(c));
+		           .forEach(minesToFlag::add);
 		clearAtIndex.stream()
 		            .map(closedCells::get)
 		            .filter(ICell::isClosedWithoutFlag)
-		            .forEach(c -> clearsToOpen.add(c));
+		            .forEach(clearsToOpen::add);
 	}
 
 	/**
@@ -201,10 +196,8 @@ public class JacopSolver implements SolverPlugin {
 			return false;
 		}
 
-		minesToFlag.stream()
-		           .forEach(cell -> controller.toggleFlag(cell.getRow(), cell.getCol()));
-		clearsToOpen.stream()
-		            .forEach(cell -> controller.openCell(cell.getRow(), cell.getCol()));
+		minesToFlag.forEach(cell -> controller.toggleFlag(cell.getRow(), cell.getCol()));
+		clearsToOpen.forEach(cell -> controller.openCell(cell.getRow(), cell.getCol()));
 
 		LOG.info("\nFound " + minesToFlag.size() + " mine(s) at:\n" + getCellCordsString(minesToFlag) + "\n Found "
 				+ clearsToOpen.size() + " safe cell(s) at:\n" + getCellCordsString(clearsToOpen));
@@ -237,7 +230,7 @@ public class JacopSolver implements SolverPlugin {
 	public boolean solve() {
 		LOG.info("Trying to solve complete board");
 		while (solveOneStep()) {
-			if (hasGameEnded(controller)) {
+			if (controller.isGameFinished()) {
 				return true;
 			}
 		}

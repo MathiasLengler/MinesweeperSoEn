@@ -280,4 +280,9 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
 	public IGrid<ICell> getGrid() {
 		return grid;
 	}
+
+	@Override
+	public boolean isGameFinished() {
+		return gameState instanceof Win || gameState instanceof Lose;
+	}
 }
