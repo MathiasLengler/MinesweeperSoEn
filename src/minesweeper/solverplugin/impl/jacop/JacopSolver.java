@@ -300,11 +300,7 @@ public class JacopSolver implements SolverPlugin {
 		double min = stats.getMin();
 		double max = stats.getMax();
 
-		boolean open = false;
-
-		if (min <= 1 - max) {
-			open = true;
-		}
+		boolean open = min <= 1 - max;
 
 		for (Map.Entry<ICell, Double> entry : cellProb.entrySet()) {
 			Double value = entry.getValue();
