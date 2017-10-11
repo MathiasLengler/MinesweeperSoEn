@@ -23,14 +23,10 @@ public class Minesweeper {
 		Injector injector = MinesweeperModule.getInjector(GridFactoryProviders.debugEasy);
 
 		IMinesweeperController controller = injector.getInstance(IMinesweeperController.class);
-		controller.openCell(0, 0);
-		controller.openCell(0, 1);
-		controller.openCell(1, 0);
-		controller.openCell(1, 4);
 
 		TextUI tui = injector.getInstance(TextUI.class);
-		tui.setPrintGrid(false);
-		tui.setPrintCommands(false);
+        tui.setPrintGrid(true);
+        tui.setPrintCommands(false);
 
 		try {
 			SwingUtilities.invokeAndWait(() -> {
