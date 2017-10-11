@@ -49,4 +49,8 @@ public class Minesweeper {
 		gui.dispose();
 	}
 
+	public static TextUI getTuiInstance() {
+		Injector injector = MinesweeperModule.getInjector(GridFactoryProviders.debugEasy);
+		return injector.getInstance(TextUI.class);
+	}
 }
