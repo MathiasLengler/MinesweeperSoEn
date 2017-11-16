@@ -5,11 +5,11 @@ import minesweeper.model.IGrid;
 import minesweeper.model.IMineDistributeStrategy;
 
 public class NoMinesDistribute implements IMineDistributeStrategy {
-	public NoMinesDistribute() {
-	}
+    public NoMinesDistribute() {
+    }
 
-	@Override
-	public void distributeMines(IGrid<ICellMutable> grid) {
-		// This strategy places no mines
-	}
+    @Override
+    public void distributeMines(IGrid<ICellMutable> grid) {
+        // This strategy places no mines
+    }
 }

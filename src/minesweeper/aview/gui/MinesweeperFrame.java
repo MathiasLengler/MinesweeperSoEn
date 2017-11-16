@@ -19,99 +19,99 @@ import java.util.Set;
 
 @Singleton
 public class MinesweeperFrame extends JFrame implements IObserver {
-	private static final Logger LOGGER = Logger.getLogger(MinesweeperFrame.class);
+    private static final Logger LOGGER = Logger.getLogger(MinesweeperFrame.class);
 
-	private JPanel mainPanel;
+    private JPanel mainPanel;
 
-	private StatusPanel statusPanel;
-	private GridPanelWrapper gridPanelWrapper;
-	private GridPanel gridPanel;
-	private GameStatsPanel gameStatsPanel;
+    private StatusPanel statusPanel;
+    private GridPanelWrapper gridPanelWrapper;
+    private GridPanel gridPanel;
+    private GameStatsPanel gameStatsPanel;
 
-	static final Color BG = new Color(192, 192, 192);
+    static final Color BG = new Color(192, 192, 192);
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Inject
-	public MinesweeperFrame(final IMinesweeperController controller, final Set<SolverPlugin> plugins) {
-		controller.addObserver(this);
+    @Inject
+    public MinesweeperFrame(final IMinesweeperController controller, final Set<SolverPlugin> plugins) {
+        controller.addObserver(this);
 
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			LOGGER.info("Can't change look and feel", e);
-		}
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            LOGGER.info("Can't change look and feel", e);
+        }
 
-		MinesweeperMenuBar menuBar = new MinesweeperMenuBar(controller, plugins);
-		setJMenuBar(menuBar);
+        MinesweeperMenuBar menuBar = new MinesweeperMenuBar(controller, plugins);
+        setJMenuBar(menuBar);
 
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
-		mainPanel.setBorder(new CompoundBorder(BorderFactory.createRaisedBevelBorder(),
-				BorderFactory.createEmptyBorder(6, 6, 6, 6)));
-		mainPanel.setBackground(BG);
-		add(mainPanel);
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBorder(new CompoundBorder(BorderFactory.createRaisedBevelBorder(),
+                BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+        mainPanel.setBackground(BG);
+        add(mainPanel);
 
-		gameStatsPanel = new GameStatsPanel(controller);
-		mainPanel.add(gameStatsPanel, BorderLayout.NORTH);
+        gameStatsPanel = new GameStatsPanel(controller);
+        mainPanel.add(gameStatsPanel, BorderLayout.NORTH);
 
-		gridPanelWrapper = new GridPanelWrapper(controller);
-		gridPanel = gridPanelWrapper.getGridPanel();
-		mainPanel.add(gridPanelWrapper, BorderLayout.CENTER);
+        gridPanelWrapper = new GridPanelWrapper(controller);
+        gridPanel = gridPanelWrapper.getGridPanel();
+        mainPanel.add(gridPanelWrapper, BorderLayout.CENTER);
 
-		statusPanel = new StatusPanel(controller);
-		mainPanel.add(statusPanel, BorderLayout.SOUTH);
+        statusPanel = new StatusPanel(controller);
+        mainPanel.add(statusPanel, BorderLayout.SOUTH);
 
-		update(new NoCellChanged());
+        update(new NoCellChanged());
 
-		setTitle("Minesweeper");
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setResizable(true);
+        setTitle("Minesweeper");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(true);
 
-		SwingUtilities.invokeLater(this::setMinSizeAndResize);
-	}
+        SwingUtilities.invokeLater(this::setMinSizeAndResize);
+    }
 
-	@Override
-	public void update(Event e) {
-		gameStatsPanel.updateGameStats();
-		statusPanel.updateText();
+    @Override
+    public void update(Event e) {
+        gameStatsPanel.updateGameStats();
+        statusPanel.updateText();
 
-		if (e instanceof MultipleCellsChanged) {
-			gridPanel.updateAllCells();
-		} else if (e instanceof SingleCellChanged) {
-			SingleCellChanged updateCell = (SingleCellChanged) e;
-			gridPanel.updateCell(updateCell.getRow(), updateCell.getCol());
-		} else if (e instanceof DimensionsChanged) {
-			gridPanel.rebuildCells();
-			repack();
-			revalidate();
-			repaint();
-		} else if (e instanceof NoCellChanged) {
-			// Nothing to do
-		} else {
-			throw new IllegalArgumentException("Illegal Event Type");
-		}
-	}
+        if (e instanceof MultipleCellsChanged) {
+            gridPanel.updateAllCells();
+        } else if (e instanceof SingleCellChanged) {
+            SingleCellChanged updateCell = (SingleCellChanged) e;
+            gridPanel.updateCell(updateCell.getRow(), updateCell.getCol());
+        } else if (e instanceof DimensionsChanged) {
+            gridPanel.rebuildCells();
+            repack();
+            revalidate();
+            repaint();
+        } else if (e instanceof NoCellChanged) {
+            // Nothing to do
+        } else {
+            throw new IllegalArgumentException("Illegal Event Type");
+        }
+    }
 
-	private void setMinSizeAndResize() {
-		setMinSize();
-		setSize(getMinimumSize());
-	}
+    private void setMinSizeAndResize() {
+        setMinSize();
+        setSize(getMinimumSize());
+    }
 
-	private void setMinSize() {
-		Dimension min = getLayout().minimumLayoutSize(this);
+    private void setMinSize() {
+        Dimension min = getLayout().minimumLayoutSize(this);
 
-		// Need to add 18 because minimum layout size is to small for whatever
-		// reason
-		min = new Dimension(min.width, min.height + 18);
-		setMinimumSize(min);
-	}
+        // Need to add 18 because minimum layout size is to small for whatever
+        // reason
+        min = new Dimension(min.width, min.height + 18);
+        setMinimumSize(min);
+    }
 
-	public void repack() {
-		if (getSize().equals(getMinimumSize())) {
-			setMinSizeAndResize();
-		} else {
-			setMinSize();
-		}
-	}
+    public void repack() {
+        if (getSize().equals(getMinimumSize())) {
+            setMinSizeAndResize();
+        } else {
+            setMinSize();
+        }
+    }
 }

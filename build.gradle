@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
     }
 }
 
@@ -21,7 +21,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 idea {
     project {
-        //if you want to set specific jdk and language level
         jdkName = '1.8'
         languageLevel = '1.8'
     }
@@ -34,7 +33,6 @@ eclipse {
   }
 }
 
-//noinspection GroovyAssignabilityCheck
 dependencies {
     compile group: 'com.google.inject', name: 'guice', version: '4.0'
     compile 'log4j:log4j:1.2.17'
@@ -47,13 +45,11 @@ dependencies {
     testCompile "junit:junit:4.11"
 }
 
-//noinspection GroovyAssignabilityCheck
 sourceSets {
     main.java.srcDir "src"
     test.java.srcDir "test"
 }
 
-//noinspection GroovyAssignabilityCheck
 jar {
     manifest.attributes "Main-Class":"minesweeper.Minesweeper"
 }

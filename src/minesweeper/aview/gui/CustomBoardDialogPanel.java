@@ -6,80 +6,80 @@ import java.awt.*;
 import java.text.NumberFormat;
 
 public class CustomBoardDialogPanel extends JPanel {
-	private final SpinnerNumberModel heightSpinner;
-	private final SpinnerNumberModel widthSpinner;
-	private final SpinnerNumberModel mineSpinner;
-	private final NumberFormat percentFormat;
-	private final JLabel ratioLabel;
+    private final SpinnerNumberModel heightSpinner;
+    private final SpinnerNumberModel widthSpinner;
+    private final SpinnerNumberModel mineSpinner;
+    private final NumberFormat percentFormat;
+    private final JLabel ratioLabel;
 
-	public CustomBoardDialogPanel() {
-		setLayout(new GridLayout(4, 2));
+    public CustomBoardDialogPanel() {
+        setLayout(new GridLayout(4, 2));
 
-		JSpinner spinner;
+        JSpinner spinner;
 
-		add(new JLabel("Height"));
+        add(new JLabel("Height"));
 
-		heightSpinner = new SpinnerNumberModel(8, 2, 99, 1);
-		spinner = new JSpinner(heightSpinner);
-		add(spinner);
+        heightSpinner = new SpinnerNumberModel(8, 2, 99, 1);
+        spinner = new JSpinner(heightSpinner);
+        add(spinner);
 
-		add(new JLabel("Width"));
+        add(new JLabel("Width"));
 
-		widthSpinner = new SpinnerNumberModel(8, 2, 99, 1);
-		spinner = new JSpinner(widthSpinner);
-		add(spinner);
+        widthSpinner = new SpinnerNumberModel(8, 2, 99, 1);
+        spinner = new JSpinner(widthSpinner);
+        add(spinner);
 
-		add(new JLabel("Mines"));
+        add(new JLabel("Mines"));
 
-		mineSpinner = new SpinnerNumberModel(1, 1, 63, 1);
-		spinner = new JSpinner(mineSpinner);
-		add(spinner);
+        mineSpinner = new SpinnerNumberModel(1, 1, 63, 1);
+        spinner = new JSpinner(mineSpinner);
+        add(spinner);
 
-		add(new JLabel("Ratio"));
+        add(new JLabel("Ratio"));
 
-		ratioLabel = new JLabel();
-		add(ratioLabel);
+        ratioLabel = new JLabel();
+        add(ratioLabel);
 
-		final ChangeListener dimensionHandler = e -> {
-			mineSpinner.setMaximum(getCellCount() - 1);
-			if (mineSpinner.getNumber().intValue() >= getCellCount()) {
-				mineSpinner.setValue(getCellCount() - 1);
-			}
-			updateRatio();
-		};
+        final ChangeListener dimensionHandler = e -> {
+            mineSpinner.setMaximum(getCellCount() - 1);
+            if (mineSpinner.getNumber().intValue() >= getCellCount()) {
+                mineSpinner.setValue(getCellCount() - 1);
+            }
+            updateRatio();
+        };
 
-		heightSpinner.addChangeListener(dimensionHandler);
-		widthSpinner.addChangeListener(dimensionHandler);
-		mineSpinner.addChangeListener(e -> updateRatio());
+        heightSpinner.addChangeListener(dimensionHandler);
+        widthSpinner.addChangeListener(dimensionHandler);
+        mineSpinner.addChangeListener(e -> updateRatio());
 
-		percentFormat = NumberFormat.getPercentInstance();
-		percentFormat.setMinimumFractionDigits(0);
-		percentFormat.setMaximumFractionDigits(3);
+        percentFormat = NumberFormat.getPercentInstance();
+        percentFormat.setMinimumFractionDigits(0);
+        percentFormat.setMaximumFractionDigits(3);
 
-		updateRatio();
-	}
+        updateRatio();
+    }
 
-	private void updateRatio() {
-		ratioLabel.setText(percentFormat.format(getMineRatio()));
-	}
+    private void updateRatio() {
+        ratioLabel.setText(percentFormat.format(getMineRatio()));
+    }
 
-	private double getMineRatio() {
-		return mineSpinner.getNumber().doubleValue() / getCellCount();
-	}
+    private double getMineRatio() {
+        return mineSpinner.getNumber().doubleValue() / getCellCount();
+    }
 
-	private int getCellCount() {
-		return heightSpinner.getNumber().intValue() * widthSpinner.getNumber().intValue();
-	}
+    private int getCellCount() {
+        return heightSpinner.getNumber().intValue() * widthSpinner.getNumber().intValue();
+    }
 
-	public int getSelectedHeight() {
-		return heightSpinner.getNumber().intValue();
-	}
+    public int getSelectedHeight() {
+        return heightSpinner.getNumber().intValue();
+    }
 
-	public int getSelectedWidth() {
-		return widthSpinner.getNumber().intValue();
-	}
+    public int getSelectedWidth() {
+        return widthSpinner.getNumber().intValue();
+    }
 
-	public int getSelectedMines() {
-		return mineSpinner.getNumber().intValue();
-	}
+    public int getSelectedMines() {
+        return mineSpinner.getNumber().intValue();
+    }
 }

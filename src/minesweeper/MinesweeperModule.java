@@ -14,20 +14,20 @@ import minesweeper.solverplugin.impl.jacop.JacopSolver;
 
 public class MinesweeperModule extends AbstractModule {
 
-	public static Injector getInjector(Provider<IGridFactory> provider) {
-		GridFactoryModule gridFactoryModule = new GridFactoryModule();
-		gridFactoryModule.setProvider(provider);
-		return Guice.createInjector(new MinesweeperModule(), gridFactoryModule);
-	}
+    public static Injector getInjector(Provider<IGridFactory> provider) {
+        GridFactoryModule gridFactoryModule = new GridFactoryModule();
+        gridFactoryModule.setProvider(provider);
+        return Guice.createInjector(new MinesweeperModule(), gridFactoryModule);
+    }
 
-	@Override
-	protected void configure() {
-		bind(IMinesweeperController.class).to(ControllerWrapper.class);
-		bind(IMinesweeperControllerSolvable.class).to(ControllerWrapper.class);
+    @Override
+    protected void configure() {
+        bind(IMinesweeperController.class).to(ControllerWrapper.class);
+        bind(IMinesweeperControllerSolvable.class).to(ControllerWrapper.class);
 
-		Multibinder<SolverPlugin> plugins = Multibinder.newSetBinder(binder(), SolverPlugin.class);
-		plugins.addBinding().to(JacopSolver.class);
-	}
+        Multibinder<SolverPlugin> plugins = Multibinder.newSetBinder(binder(), SolverPlugin.class);
+        plugins.addBinding().to(JacopSolver.class);
+    }
 
 
 }

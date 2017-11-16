@@ -5,7 +5,7 @@ import minesweeper.model.IGrid;
 
 public interface IMinesweeperControllerSolvable extends IMinesweeperController {
 
-	IGrid<ICell> getGrid();
+    IGrid<ICell> getGrid();
 
-	boolean isGameFinished();
+    boolean isGameFinished();
 }

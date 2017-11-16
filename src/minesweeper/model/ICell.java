@@ -2,49 +2,49 @@ package minesweeper.model;
 
 public interface ICell {
 
-	enum State {
-		OPENED, CLOSED, FLAG
-	}
+    enum State {
+        OPENED, CLOSED, FLAG
+    }
 
-	int getCol();
+    int getCol();
 
-	int getRow();
+    int getRow();
 
-	int getMines();
+    int getMines();
 
-	State getState();
+    State getState();
 
-	boolean isClosed();
+    boolean isClosed();
 
-	boolean isClosedWithoutFlag();
+    boolean isClosedWithoutFlag();
 
-	boolean isOpened();
+    boolean isOpened();
 
-	boolean isFlag();
+    boolean isFlag();
 
-	boolean isMine();
+    boolean isMine();
 
-	void setState(State state);
+    void setState(State state);
 
-	/**
-	 * Returns a long representation of this cell, e.g. "(1,0)=F"
-	 *
-	 * @return a long representation of this cell
-	 */
-	String mkString();
+    /**
+     * Returns a long representation of this cell, e.g. "(1,0)=F"
+     *
+     * @return a long representation of this cell
+     */
+    String mkString();
 
-	/**
-	 * Returns a short representation of this cell, e.g. "F" for a flag
-	 *
-	 * @return a short representation of this cell
-	 */
-	@Override
-	String toString();
+    /**
+     * Returns a short representation of this cell, e.g. "F" for a flag
+     *
+     * @return a short representation of this cell
+     */
+    @Override
+    String toString();
 
-	@Override
-	int hashCode();
+    @Override
+    int hashCode();
 
-	@Override
-	boolean equals(Object obj);
+    @Override
+    boolean equals(Object obj);
 
 }

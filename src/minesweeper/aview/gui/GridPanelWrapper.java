@@ -8,22 +8,22 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class GridPanelWrapper extends JPanel {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final GridPanel gridPanel;
+    private final GridPanel gridPanel;
 
-	public GridPanelWrapper(final IMinesweeperController controller) {
-		gridPanel = new GridPanel(controller, this);
+    public GridPanelWrapper(final IMinesweeperController controller) {
+        gridPanel = new GridPanel(controller, this);
 
-		setBorder(new CompoundBorder(new EmptyBorder(6, 0, 6, 0), BorderFactory.createLoweredBevelBorder()));
-		setBackground(MinesweeperFrame.BG);
+        setBorder(new CompoundBorder(new EmptyBorder(6, 0, 6, 0), BorderFactory.createLoweredBevelBorder()));
+        setBackground(MinesweeperFrame.BG);
 
-		setLayout(new GridBagLayout());
-		add(gridPanel);
-	}
+        setLayout(new GridBagLayout());
+        add(gridPanel);
+    }
 
-	public GridPanel getGridPanel() {
-		return gridPanel;
-	}
+    public GridPanel getGridPanel() {
+        return gridPanel;
+    }
 
 }

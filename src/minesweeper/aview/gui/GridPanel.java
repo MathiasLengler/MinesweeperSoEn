@@ -9,112 +9,112 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class GridPanel extends JPanel {
-	private IMinesweeperController controller;
+    private IMinesweeperController controller;
 
-	private CellPanel[][] cellPanels;
+    private CellPanel[][] cellPanels;
 
-	private final MouseListener cellListener;
+    private final MouseListener cellListener;
 
-	private final RepaintManager repaintMgr;
+    private final RepaintManager repaintMgr;
 
-	private GridPanelWrapper outer;
+    private GridPanelWrapper outer;
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public GridPanel(final IMinesweeperController controller, final GridPanelWrapper outer) {
-		this.controller = controller;
-		this.cellListener = new CellListener();
-		this.outer = outer;
-		repaintMgr = RepaintManager.currentManager(this);
-		rebuildCells();
-		setBackground(MinesweeperFrame.BG);
-	}
+    public GridPanel(final IMinesweeperController controller, final GridPanelWrapper outer) {
+        this.controller = controller;
+        this.cellListener = new CellListener();
+        this.outer = outer;
+        repaintMgr = RepaintManager.currentManager(this);
+        rebuildCells();
+        setBackground(MinesweeperFrame.BG);
+    }
 
-	private class CellListener extends MouseAdapter {
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			MouseEvent eConverted = SwingUtilities.convertMouseEvent(e.getComponent(), e, GridPanel.this);
-			Object source = getComponentAt(eConverted.getPoint());
-			if (!(source instanceof CellPanel)) {
-				// mouse is outside window or not over a cell
-				return;
-			}
-			CellPanel cellPanel = (CellPanel) source;
-			int row = cellPanel.getRow();
-			int col = cellPanel.getCol();
-			if (SwingUtilities.isLeftMouseButton(eConverted)) {
-				controller.openCell(row, col);
-				return;
-			}
-			if (SwingUtilities.isMiddleMouseButton(eConverted)) {
-				controller.openAround(row, col);
-				return;
-			}
-			if (SwingUtilities.isRightMouseButton(eConverted)) {
-				controller.toggleFlag(row, col);
-				return;
-			}
-		}
-	}
+    private class CellListener extends MouseAdapter {
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            MouseEvent eConverted = SwingUtilities.convertMouseEvent(e.getComponent(), e, GridPanel.this);
+            Object source = getComponentAt(eConverted.getPoint());
+            if (!(source instanceof CellPanel)) {
+                // mouse is outside window or not over a cell
+                return;
+            }
+            CellPanel cellPanel = (CellPanel) source;
+            int row = cellPanel.getRow();
+            int col = cellPanel.getCol();
+            if (SwingUtilities.isLeftMouseButton(eConverted)) {
+                controller.openCell(row, col);
+                return;
+            }
+            if (SwingUtilities.isMiddleMouseButton(eConverted)) {
+                controller.openAround(row, col);
+                return;
+            }
+            if (SwingUtilities.isRightMouseButton(eConverted)) {
+                controller.toggleFlag(row, col);
+                return;
+            }
+        }
+    }
 
-	public void rebuildCells() {
-		removeAll();
+    public void rebuildCells() {
+        removeAll();
 
-		int height = controller.getHeight();
-		int width = controller.getWidth();
+        int height = controller.getHeight();
+        int width = controller.getWidth();
 
-		setLayout(new GridLayout(height, width));
+        setLayout(new GridLayout(height, width));
 
-		cellPanels = new CellPanel[height][width];
+        cellPanels = new CellPanel[height][width];
 
-		for (int row = 0; row < height; row++) {
-			for (int col = 0; col < width; col++) {
-				boolean rightEdge = width == col + 1;
-				boolean bottomEdge = height == row + 1;
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                boolean rightEdge = width == col + 1;
+                boolean bottomEdge = height == row + 1;
 
-				CellPanel cellPanel = new CellPanel(controller, row, col, rightEdge, bottomEdge);
-				cellPanel.addMouseListener(cellListener);
-				cellPanels[row][col] = cellPanel;
-				add(cellPanel);
-				repaintMgr.markCompletelyClean(cellPanel);
-			}
-		}
+                CellPanel cellPanel = new CellPanel(controller, row, col, rightEdge, bottomEdge);
+                cellPanel.addMouseListener(cellListener);
+                cellPanels[row][col] = cellPanel;
+                add(cellPanel);
+                repaintMgr.markCompletelyClean(cellPanel);
+            }
+        }
 
-		repaintMgr.markCompletelyDirty(this);
-	}
+        repaintMgr.markCompletelyDirty(this);
+    }
 
-	public void updateCell(int row, int col) {
-		CellPanel cellPanel = cellPanels[row][col];
-		cellPanel.updateCell();
-	}
+    public void updateCell(int row, int col) {
+        CellPanel cellPanel = cellPanels[row][col];
+        cellPanel.updateCell();
+    }
 
-	public void updateAllCells() {
-		for (CellPanel[] rows : cellPanels) {
-			for (CellPanel cellPanel : rows) {
-				cellPanel.updateCell();
-				repaintMgr.markCompletelyClean(cellPanel);
-			}
-		}
-		repaintMgr.markCompletelyDirty(this);
-	}
+    public void updateAllCells() {
+        for (CellPanel[] rows : cellPanels) {
+            for (CellPanel cellPanel : rows) {
+                cellPanel.updateCell();
+                repaintMgr.markCompletelyClean(cellPanel);
+            }
+        }
+        repaintMgr.markCompletelyDirty(this);
+    }
 
-	@Override
-	public Dimension getPreferredSize() {
-		double innerWidth = getWidth();
-		double innerHeight = getHeight();
+    @Override
+    public Dimension getPreferredSize() {
+        double innerWidth = getWidth();
+        double innerHeight = getHeight();
 
-		Insets insets = outer.getInsets();
-		double outerWidth = outer.getSize().getWidth() - insets.left - insets.right;
-		double outerHeight = outer.getSize().getHeight() - insets.top - insets.bottom;
+        Insets insets = outer.getInsets();
+        double outerWidth = outer.getSize().getWidth() - insets.left - insets.right;
+        double outerHeight = outer.getSize().getHeight() - insets.top - insets.bottom;
 
-		double scale = Math.min(outerWidth / innerWidth, outerHeight / innerHeight);
+        double scale = Math.min(outerWidth / innerWidth, outerHeight / innerHeight);
 
-		Dimension prefSize = new Dimension((int) (innerWidth * scale), (int) (innerHeight * scale));
-		Dimension minSize = getMinimumSize();
-		if (prefSize.height < minSize.height || prefSize.width < minSize.width) {
-			return minSize;
-		} else {
-			return prefSize;
-		}
-	}
+        Dimension prefSize = new Dimension((int) (innerWidth * scale), (int) (innerHeight * scale));
+        Dimension minSize = getMinimumSize();
+        if (prefSize.height < minSize.height || prefSize.width < minSize.width) {
+            return minSize;
+        } else {
+            return prefSize;
+        }
+    }
 }

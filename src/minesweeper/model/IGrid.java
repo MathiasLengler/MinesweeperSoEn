@@ -4,25 +4,25 @@ import java.util.List;
 
 public interface IGrid<T extends ICell> {
 
-	T getCell(int row, int col);
+    T getCell(int row, int col);
 
-	int getHeight();
+    int getHeight();
 
-	int getWidth();
+    int getWidth();
 
-	int getMines();
+    int getMines();
 
-	long getSecondsSinceCreated();
+    long getSecondsSinceCreated();
 
-	List<T> getCells();
+    List<T> getCells();
 
-	List<T> getAdjCells(int row, int col);
+    List<T> getAdjCells(int row, int col);
 
-	@Override
-	String toString();
+    @Override
+    String toString();
 
-	List<List<T>> getNestedCells();
+    List<List<T>> getNestedCells();
 
-	List<T> getAdjCells(ICell cell);
+    List<T> getAdjCells(ICell cell);
 
 }
