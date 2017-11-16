@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Minesweeper {
     private static final Logger LOGGER = Logger.getLogger(Minesweeper.class);
-
+    private static final Injector globalInjector = MinesweeperModule.getInjector(GridFactoryProviders.debugEasy);
 
     private Minesweeper() {
     }
@@ -21,9 +21,7 @@ public class Minesweeper {
         // Set up logging through log4j
         PropertyConfigurator.configure("log4j.properties");
 
-        Injector injector = MinesweeperModule.getInjector(GridFactoryProviders.debugEasy);
-
-        IMinesweeperController controller = injector.getInstance(IMinesweeperController.class);
+        Injector injector = getGlobalInjector();
 
         TextUI tui = injector.getInstance(TextUI.class);
         tui.setPrintGrid(true);
@@ -50,8 +48,7 @@ public class Minesweeper {
         gui.dispose();
     }
 
-    public static TextUI getTuiInstance() {
-        Injector injector = MinesweeperModule.getInjector(GridFactoryProviders.debugEasy);
-        return injector.getInstance(TextUI.class);
+    public static Injector getGlobalInjector() {
+        return globalInjector;
     }
 }
