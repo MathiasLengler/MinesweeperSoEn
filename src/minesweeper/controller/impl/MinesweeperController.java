@@ -285,4 +285,9 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
     public boolean isGameFinished() {
         return gameState instanceof Win || gameState instanceof Lose;
     }
+
+    @Override
+    public String getGameStateString() {
+        return gameState.getClass().getName();
+    }
 }

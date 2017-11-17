@@ -111,4 +111,9 @@ public class ControllerWrapper extends Observable implements IMinesweeperControl
         return controller.isGameFinished();
     }
 
+    @Override
+    public String getGameStateString() {
+        return controller.getGameStateString();
+    }
+
 }

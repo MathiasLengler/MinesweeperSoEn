@@ -8,4 +8,6 @@ public interface IMinesweeperControllerSolvable extends IMinesweeperController {
     IGrid<ICell> getGrid();
 
     boolean isGameFinished();
+
+    String getGameStateString();
 }
