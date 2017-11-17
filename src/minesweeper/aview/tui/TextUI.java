@@ -118,6 +118,10 @@ public class TextUI implements IObserver {
     }
 
     private void illegalCommand(String message) {
-        LOGGER.info(NEWLINE + message + NEWLINE + COMMANDS);
+        if (printCommands) {
+            LOGGER.info(NEWLINE + message + NEWLINE + COMMANDS);
+        } else {
+            LOGGER.info(message);
+        }
     }
 }
