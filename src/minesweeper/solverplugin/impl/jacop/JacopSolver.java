@@ -65,8 +65,7 @@ public class JacopSolver implements SolverPlugin {
         return splitEdgeMaps;
     }
 
-    private static ImmutableSetMultimap<ICell, ICell> getEdgeMap(IMinesweeperControllerSolvable controller) {
-        IGrid<ICell> grid = controller.getGrid();
+    private static ImmutableSetMultimap<ICell, ICell> getEdgeMap(IGrid<ICell> grid) {
 
         SetMultimap<ICell, ICell> edgeMap = LinkedHashMultimap.create();
 
@@ -237,11 +236,8 @@ public class JacopSolver implements SolverPlugin {
         return false;
     }
 
-    @Override
-    public boolean solveOneStep() {
-        LOG.info("\nSolving one step");
-
-        ImmutableSetMultimap<ICell, ICell> completeEdgeMap = getEdgeMap(controller);
+    public static SolveResult buildSolveResult(IGrid<ICell> grid) throws SolveException {
+        ImmutableSetMultimap<ICell, ICell> completeEdgeMap = getEdgeMap(grid);
         ImmutableList<ICell> completeClosedCells = getClosedCells(completeEdgeMap);
         ImmutableList<ICell> completeOpenCells = getOpenCells(completeEdgeMap);
 
@@ -268,8 +264,7 @@ public class JacopSolver implements SolverPlugin {
             try {
                 varProb = runJacop(edgeMap, closedCells, openCells);
             } catch (SolveException e) {
-                LOG.error("SolveException while solving system " + i, e);
-                return false;
+                throw new JacopSolver.SolveException("SolveException while solving system " + i, e);
             }
 
             LOG.debug("\nProbabilities:\n"
@@ -280,19 +275,32 @@ public class JacopSolver implements SolverPlugin {
             addCellProbabilities(cellProb, closedCells, varProb);
         }
 
-        if (openAndFlagCells(controller, minesToFlag, clearsToOpen))
-            return true;
-
-        if (guessing) {
-            openOrFlagSafestCell(cellProb);
-            return true;
-        } else {
-            return false;
-        }
-
+        return new SolveResult(minesToFlag, clearsToOpen, cellProb);
     }
 
-    private void openOrFlagSafestCell(Map<ICell, Double> cellProb) {
+    public boolean solveOneStep() {
+        LOG.info("\nSolving one step");
+
+        try {
+            JacopSolver.SolveResult solveResult = buildSolveResult(this.controller.getGrid());
+            Map<ICell, Double> cellProb = solveResult.cellProb;
+            List<ICell> clearsToOpen = solveResult.clearsToOpen;
+            List<ICell> minesToFlag = solveResult.minesToFlag;
+            if (openAndFlagCells(this.controller, minesToFlag, clearsToOpen)) {
+                return true;
+            } else if (this.guessing) {
+                this.openOrFlagSafestCell(this.controller, cellProb);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (JacopSolver.SolveException var5) {
+            LOG.error("SolveException: ", var5);
+            return false;
+        }
+    }
+
+    private void openOrFlagSafestCell(IMinesweeperControllerSolvable controller, Map<ICell, Double> cellProb) {
         if (cellProb.isEmpty())
             return;
 
@@ -340,6 +348,20 @@ public class JacopSolver implements SolverPlugin {
         public SolveException(String message) {
             super(message);
         }
+        public SolveException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 
+    public static class SolveResult {
+        public final List<ICell> minesToFlag;
+        public final List<ICell> clearsToOpen;
+        public final Map<ICell, Double> cellProb;
+
+        public SolveResult(List<ICell> minesToFlag, List<ICell> clearsToOpen, Map<ICell, Double> cellProb) {
+            this.minesToFlag = minesToFlag;
+            this.clearsToOpen = clearsToOpen;
+            this.cellProb = cellProb;
+        }
+    }
 }
