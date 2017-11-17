@@ -3,7 +3,6 @@ package minesweeper;
 import com.google.inject.Injector;
 import minesweeper.aview.gui.MinesweeperFrame;
 import minesweeper.aview.tui.TextUI;
-import minesweeper.controller.IMinesweeperController;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 

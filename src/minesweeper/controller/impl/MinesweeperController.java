@@ -27,6 +27,8 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
          * @return if the game has ended.
          */
         boolean checkStatus();
+
+        String getGameStateString();
     }
 
     private class Running implements GameState {
@@ -35,6 +37,11 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
             event = null;
             return false;
         }
+
+        @Override
+        public String getGameStateString() {
+            return "Running";
+        }
     }
 
     private class FirstClick implements GameState {
@@ -42,6 +49,11 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
         public boolean checkStatus() {
             event = null;
             return false;
+        }
+
+        @Override
+        public String getGameStateString() {
+            return "FirstClick";
         }
     }
 
@@ -52,6 +64,11 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
             event = new NoCellChanged();
             return true;
         }
+
+        @Override
+        public String getGameStateString() {
+            return "Win";
+        }
     }
 
     private class Lose implements GameState {
@@ -60,6 +77,11 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
             statusLine = "Game over";
             event = new NoCellChanged();
             return true;
+        }
+
+        @Override
+        public String getGameStateString() {
+            return "Lose";
         }
     }
 
@@ -288,6 +310,6 @@ public class MinesweeperController extends Observable implements IMinesweeperCon
 
     @Override
     public String getGameStateString() {
-        return gameState.getClass().getName();
+        return gameState.getGameStateString();
     }
 }
